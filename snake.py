@@ -1,4 +1,5 @@
 import random
+from this import d
 
 
 '''''
@@ -13,7 +14,7 @@ class snake_board:
         self.board : list = [[0 for i in range(size)] for j in range(size)]
         self.apple : list = []
         self.add_apple(apples_amount)
-        
+
 
     def __repr__(self) -> str:
         return_string = ''
@@ -39,7 +40,12 @@ class snake_board:
             self.__add_apple()
             return
         location_row[index] = 1
-        return (location_row , index)
+        return (location_row , index)   
+
+    def reset_board(self):
+        for i in range(len(self.board)):
+            for j in range(len(self.board)):
+                self.board[i][j] = 0
 
 class snake:
     def __init__(self, board : snake_board) -> None:
@@ -49,6 +55,7 @@ class snake:
         self.locations.append(start)    
         self.dir = 'left'
         self.place()
+
 
     def start_location(self):
         row = random.randint(0, len(self.board.board)-1)
@@ -68,7 +75,6 @@ class snake:
                 raise Exception('poop')
 
             if self.board.board[move[0]-1][move[1]] == 1:
-                print('eat')
 
                 #apple
                 new_location.append((move[0]-1,move[1]))
@@ -114,7 +120,6 @@ class snake:
                 raise Exception('poop')
 
             if self.board.board[move[0]][move[1]-1] == 1:
-                print('eat')
 
                 new_location.append((move[0],move[1]-1))
                 for place in range(len(self.locations)):
@@ -130,10 +135,10 @@ class snake:
         elif side == 'd': # side is bottom.
             move = self.locations[0]
             if move[0]+1 > len(self.board.board):
-                raise Exception('you lost')
+                raise Exception()
+            
             if (move[0]+1,move[1]) in self.locations:
-                raise Exception('poop')
-
+                raise Exception()
             if self.board.board[move[0]+1][move[1]] == 1:
                 print('eat')
                 new_location.append((move[0]+1,move[1]))
@@ -151,9 +156,15 @@ class snake:
     def place(self):
         for row in range(len(self.board.board)):
             for index in range(len(self.board.board)):
-                if self.board.board[row][index] == 2:
+                if self.board.board[row][index] == 2 or self.board.board[row][index] == 3:
                     self.board.board[row][index] = 0
+        flag = True
         for i in self.locations:
+            if flag:
+                self.board.board[i[0]][i[1]] = 3
+                flag = False 
+                continue
+           
             self.board.board[i[0]][i[1]] = 2
 
 

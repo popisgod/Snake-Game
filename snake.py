@@ -1,5 +1,4 @@
 import random
-from this import d
 
 
 '''''

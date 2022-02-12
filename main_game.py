@@ -1,8 +1,4 @@
-from ast import Return
-from cgi import test
 import time
-from tkinter.tix import Tree
-from turtle import right, width
 import arcade
 import snake
 import pyautogui        
@@ -27,7 +23,7 @@ def point_in(center,size,point): # first arg is the left bottom corner, second a
     last_point = (center[0]+size[0]/2,center[1]+size[1]/2)
     first_point = (center[0]- size[0]/2,center[1]-size[1]/2)
     if point[0] > first_point[0] and point[0] < last_point[0] and point[1] > first_point[1] and point[1] < last_point[1]:
-        return Tree
+        return True
     return False
 
 

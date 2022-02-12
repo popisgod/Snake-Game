@@ -2,7 +2,7 @@ from ast import Return
 from cgi import test
 import time
 from tkinter.tix import Tree
-from turtle import right
+from turtle import right, width
 import arcade
 import snake
 import pyautogui        
@@ -47,22 +47,25 @@ class MyGame(arcade.Window):
         self.menu()
         self.difficulty_level = 1
         self.button_size = (200,50)
-
+        self.total = 0
     def menu(self):
         self.difficulty_page = False
         self.menu_open = True
         self.start = False
         self.scores = [0]
-        self.total = time.time
         self.start_time = time.time()     
         arcade.set_background_color(arcade.color.BLACK)
         self.restart()
+        self.start_timer = False
 
     def on_draw(self):
         """
         Render the screen.
         """
-        apple = r'C:\Users\Ron\python_projects\Snake_game\download.png'
+        if not self.start_timer and self.start:
+            self.total = time.time()
+            self.start_timer = True
+
         self.clear()
         if self.start:
             self.clear()
@@ -91,6 +94,7 @@ class MyGame(arcade.Window):
         # gui for the game page
         if not self.lost_screen and not self.menu_open and not self.difficulty_page:
             flag = False
+            # draws the board
             for row in range(ROW_COUNT):
                 flag = not flag
                 if row == 15 or row == 14: continue
@@ -107,28 +111,38 @@ class MyGame(arcade.Window):
                     y = (MARGIN + HEIGHT) * row + MARGIN + HEIGHT // 2
                     if color != None:
                         arcade.draw_rectangle_filled( x,y, WIDTH+5, HEIGHT+5, color)
-            for row in range(ROW_COUNT):
+            # drawing the snake and the apple 
+            for row in range(ROW_COUNT):  
                 if row == 15 or row == 14: continue
                 for column in range(COLUMN_COUNT):
                     color = None
                     if color == None:
                         if self.board.board[row][column] == 1:
-                            color = arcade.color.RED
+                            x = (MARGIN + WIDTH) * column + MARGIN + WIDTH // 2
+                            y = (MARGIN + HEIGHT) * row + MARGIN + HEIGHT // 2
+                            arcade.draw_circle_filled( x,y, 15, arcade.color.RED)
+                            arcade.draw_rectangle_filled(x,y+15,3,7,arcade.color.BLACK)
                         if self.board.board[row][column] == 2:
-                            color = arcade.color.WHITE
+                            color = arcade.color.SEAL_BROWN	
                         if self.board.board[row][column] == 3:
                             color = arcade.color.PURPLE
                     # Do the math to figure out where the box is
                     x = (MARGIN + WIDTH) * column + MARGIN + WIDTH // 2
                     y = (MARGIN + HEIGHT) * row + MARGIN + HEIGHT // 2
                     if color != None:
-                        arcade.draw_rectangle_filled( x,y, WIDTH+5, HEIGHT+5, color)
-            arcade.draw_rectangle_filled(495/2,495,495,1,arcade.color.GREEN)   
-            arcade.draw_text(f'score : {len(self.snake.locations)-4}',20.0,510.0,
-                         arcade.color.WHITE,30,20,'left') 
-            arcade.draw_text(f'best score : {max(self.scores)}',215.0,510.0,
-                         arcade.color.WHITE,30,20,'left') 
-
+                        arcade.draw_rectangle_filled( x,y, 35,35, color)
+            arcade.draw_rectangle_filled(495/2,495,495,3,arcade.color.GREEN)
+            arcade.draw_rectangle_filled(324,(565-495)/2+495,4,565-500,arcade.color.GREEN) 
+            arcade.draw_rectangle_filled(136,(565-495)/2+495,4,565-500,arcade.color.GREEN)  
+            arcade.draw_text(f'score : {len(self.snake.locations)-4}',15.0,510.0,
+                         arcade.color.WHITE,17,20,'left') 
+            arcade.draw_text(f'best score : {max(self.scores)}',150.0,510.0,
+                         arcade.color.WHITE,17,20,'left') 
+            
+            temp = float((int((time.time()-self.total)*1000)))/1000
+            if self.total == 0: temp = 0
+            arcade.draw_text(f'timer : {temp}',335.0,510.0,
+                         arcade.color.WHITE,17,20,'left') 
         # gui for menu page
         if self.menu_open:
             arcade.draw_rectangle_filled(250, 300, 225, 400, arcade.color.RED)
@@ -260,6 +274,9 @@ class MyGame(arcade.Window):
         self.lost_screen = False
         self.start = False
         self.side = 'r'
+        self.start_timer = False
+        self.total = 0
+
 
 def main():
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, 'snake_game')

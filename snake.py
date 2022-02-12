@@ -69,17 +69,19 @@ class snake:
         new_location = []
         if side == 'u':
             move = self.locations[0]
+            if len(self.locations) > 1:
+                if (move[0]-1,move[1]) == self.locations[1]:
+                    self.move('d')
+                    return
             if move[0]-1 < 0:
-                raise Exception('you lost')
-            if (move[0]-1,move[1]) in self.locations:
-                raise Exception('poop')
-
+                raise Exception()
             if self.board.board[move[0]-1][move[1]] == 1:
-
                 #apple
                 new_location.append((move[0]-1,move[1]))
                 for place in range(len(self.locations)):
                     new_location.append(self.locations[place])
+                if (move[0]-1,move[1]) in new_location[1:]:
+                    raise Exception()   
                 self.locations = new_location
                 self.board.add_apple(1)    
 
@@ -87,66 +89,81 @@ class snake:
                 new_location.append((move[0]-1,move[1]))
                 for place in range(len(self.locations)-1):
                     new_location.append(self.locations[place])
+                if (move[0]-1,move[1]) in new_location[1:]:
+                    raise Exception()   
                 self.locations = new_location
 
 
         elif side == 'r':
             move = self.locations[0]
+            if len(self.locations) > 1:
+                if (move[0],move[1]+1) == self.locations[1]:
+                    self.move('l')
+                    return
             if move[1]+1 > len(self.board.board):
-                raise Exception()
-            if (move[0],move[1]+1) in self.locations:
                 raise Exception()
             if self.board.board[move[0]][move[1]+1] == 1:
                 new_location.append((move[0],move[1]+1))
                 for place in range(len(self.locations)):
                     new_location.append(self.locations[place])
+                if (move[0],move[1]+1) in new_location[1:]:
+                    raise Exception()
                 self.locations = new_location
                 self.board.add_apple(1)    
-
             else:
                 new_location.append((move[0],move[1]+1))
                 for place in range(len(self.locations)-1):
                     new_location.append(self.locations[place])
+                if (move[0],move[1]+1) in new_location[1:]:
+                    raise Exception()
                 self.locations = new_location
 
         elif side == 'l':
             move = self.locations[0]
+            if len(self.locations) > 1:
+                if (move[0],move[1]-1) == self.locations[1]:
+                    self.move('r')
+                    return
             if move[1]-1 < 0:
                 raise Exception()
-            if (move[0],move[1]-1) in self.locations:
-                raise Exception()
-
             if self.board.board[move[0]][move[1]-1] == 1:
-
                 new_location.append((move[0],move[1]-1))
                 for place in range(len(self.locations)):
                     new_location.append(self.locations[place])
+                if (move[0],move[1]-1) in new_location[1:]:
+                    raise Exception()                
                 self.locations = new_location
                 self.board.add_apple(1)     
             else:
                 new_location.append((move[0],move[1]-1))
                 for place in range(len(self.locations)-1):
                     new_location.append(self.locations[place])
+                if (move[0],move[1]-1) in new_location[1:]:
+                    raise Exception()
                 self.locations = new_location
 
         elif side == 'd': # side is bottom.
             move = self.locations[0]
+            if len(self.locations) > 1:
+                if (move[0]+1,move[1]) == self.locations[1]:
+                    self.move('u')
+                    return
             if move[0]+1 > len(self.board.board):
                 raise Exception()
-            
-            if (move[0]+1,move[1]) in self.locations:
-                raise Exception()
             if self.board.board[move[0]+1][move[1]] == 1:
-
                 new_location.append((move[0]+1,move[1]))
                 for place in range(len(self.locations)):
                     new_location.append(self.locations[place])
+                if (move[0]+1,move[1]) in new_location[1:]:
+                    raise Exception()
                 self.locations = new_location      
                 self.board.add_apple(1)          
             else:
                 new_location.append((move[0]+1,move[1]))
                 for place in range(len(self.locations)-1):
                     new_location.append(self.locations[place])
+                if (move[0]+1,move[1]) in new_location[1:]:
+                    raise Exception()
                 self.locations = new_location
         self.place()
 

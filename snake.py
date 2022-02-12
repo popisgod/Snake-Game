@@ -93,13 +93,10 @@ class snake:
         elif side == 'r':
             move = self.locations[0]
             if move[1]+1 > len(self.board.board):
-                raise Exception('you lost')
+                raise Exception()
             if (move[0],move[1]+1) in self.locations:
-                raise Exception('poop')
-
+                raise Exception()
             if self.board.board[move[0]][move[1]+1] == 1:
-                print('eat')
-
                 new_location.append((move[0],move[1]+1))
                 for place in range(len(self.locations)):
                     new_location.append(self.locations[place])
@@ -115,9 +112,9 @@ class snake:
         elif side == 'l':
             move = self.locations[0]
             if move[1]-1 < 0:
-                raise Exception('you lost')
+                raise Exception()
             if (move[0],move[1]-1) in self.locations:
-                raise Exception('poop')
+                raise Exception()
 
             if self.board.board[move[0]][move[1]-1] == 1:
 
@@ -140,7 +137,7 @@ class snake:
             if (move[0]+1,move[1]) in self.locations:
                 raise Exception()
             if self.board.board[move[0]+1][move[1]] == 1:
-                print('eat')
+
                 new_location.append((move[0]+1,move[1]))
                 for place in range(len(self.locations)):
                     new_location.append(self.locations[place])
@@ -158,32 +155,10 @@ class snake:
             for index in range(len(self.board.board)):
                 if self.board.board[row][index] == 2 or self.board.board[row][index] == 3:
                     self.board.board[row][index] = 0
-        flag = True
         for i in self.locations:
-            if flag:
+            if i == self.locations[0]:
                 self.board.board[i[0]][i[1]] = 3
                 flag = False 
                 continue
-           
             self.board.board[i[0]][i[1]] = 2
-
-
-
-    # allowed_inputs = ['d','u','r','l']
-    # test_board : snake.snake_board = snake.snake_board(14)
-    # snake_test : snake.snake = snake.snake(test_board)
-    # test_board.add_apple(1)
-    # print(test_board)
-    # while True: # snake game  
-    #     try:
-    #         move_input = input('enter the side to move to... ')
-    #         if move_input == 'quit': break
-    #         if move_input not in allowed_inputs:
-    #             print('bad input')
-    #         snake_test.move(move_input)
-    #         print(test_board)
-    #     except:
-    #         print('you have lost')
-    #         break        
-
 
